@@ -1,15 +1,17 @@
-package com.kelcarmo.capgemini.domain;
+package com.kcarmo.capgemini.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "accounts")
@@ -17,16 +19,18 @@ public class Account implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
 	private String agency;
 	private String ca;
 	private double balance;
 	
-	@JsonIgnore
-	@OneToOne // One-to-one relationship
-	@JoinColumn(name="client_id") // Column name
-	@MapsId // Id Mapping
+	@OneToOne(cascade=CascadeType.ALL, mappedBy="account") //One-to-one relationship
 	private Client client;
+	
+	@OneToMany(mappedBy="accountActive")
+	private List<Transaction> transactions = new ArrayList<>();
 	
 	public Account() {
 		
@@ -40,14 +44,14 @@ public class Account implements Serializable {
 	 * @param balance
 	 * @param client
 	 */
-	public Account(Integer id, String agency, String ca, double balance, Client client) {
+	public Account(Integer id, String agency, String ca, double balance) {
 		super();
 		
 		this.id = id;
 		this.agency = agency;
 		this.ca = ca;
 		this.balance = balance;
-		this.client = client;
+//		this.client = client;
 	}
 
 	public Integer getId() {
@@ -88,6 +92,14 @@ public class Account implements Serializable {
 	
 	public void setClient(Client client) {
 		this.client = client;
+	}
+
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
+
+	public void setTransactions(List<Transaction> transactions) {
+		this.transactions = transactions;
 	}
 
 	@Override

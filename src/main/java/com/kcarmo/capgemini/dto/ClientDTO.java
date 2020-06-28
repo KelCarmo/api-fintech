@@ -2,7 +2,7 @@ package com.kcarmo.capgemini.dto;
 
 import java.io.Serializable;
 
-import com.kelcarmo.capgemini.domain.Client;
+import com.kcarmo.capgemini.domain.Client;
 
 public class ClientDTO implements Serializable{
 	private static final long serialVersionUID = 1L;

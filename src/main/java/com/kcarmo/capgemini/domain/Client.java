@@ -1,4 +1,4 @@
-package com.kelcarmo.capgemini.domain;
+package com.kcarmo.capgemini.domain;
 
 import java.io.Serializable;
 
@@ -7,8 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity // Declare Entity
 @Table(name= "clients")
@@ -16,7 +20,6 @@ public class Client implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY) // generate identifier automatically
 	private Integer id;
 	
 	private String name;
@@ -24,7 +27,10 @@ public class Client implements Serializable {
 	private String address;
 	private String phone;
 	
-	@OneToOne(cascade=CascadeType.ALL, mappedBy="client") //One-to-one relationship
+	@JsonIgnore
+	@OneToOne // One-to-one relationship
+	@JoinColumn(name="account_id") // Column name
+	@MapsId // Id Mapping
 	private Account account;
 
 	public Client() {
@@ -40,7 +46,7 @@ public class Client implements Serializable {
 	 * @param phone
 	 * @param account
 	 */
-	public Client(Integer id, String name, String email, String address, String phone) {
+	public Client(Integer id, String name, String email, String address, String phone, Account account) {
 		super();
 		
 		this.id = id;
@@ -48,7 +54,7 @@ public class Client implements Serializable {
 		this.email = email;
 		this.address = address;
 		this.phone = phone;
-//		this.account = account;
+		this.account = account;
 	}
 
 
