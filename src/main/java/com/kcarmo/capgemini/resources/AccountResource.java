@@ -22,5 +22,12 @@ public class AccountResource {
 		
 		return ResponseEntity.ok().body(obj);
 	}
+	
+	@RequestMapping(value="account/deposit/{id}", method = RequestMethod.POST)
+	public ResponseEntity<?> deposit(@PathVariable Integer id) {
+		Account obj = accountService.findOne(id);
+		
+		return ResponseEntity.ok().body(obj);
+	}
 
 }

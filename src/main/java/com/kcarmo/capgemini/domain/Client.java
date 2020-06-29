@@ -3,6 +3,7 @@ package com.kcarmo.capgemini.domain;
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,17 +21,18 @@ public class Client implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
+	@Column(unique = true)
+	private String cpf;
 	
 	private String name;
 	private String email;
 	private String address;
 	private String phone;
 	
-	@JsonIgnore
-	@OneToOne // One-to-one relationship
-	@JoinColumn(name="account_id") // Column name
-	@MapsId // Id Mapping
+	@OneToOne(cascade=CascadeType.ALL, mappedBy="client") //One-to-one relationship
 	private Account account;
 
 	public Client() {
@@ -46,7 +48,7 @@ public class Client implements Serializable {
 	 * @param phone
 	 * @param account
 	 */
-	public Client(Integer id, String name, String email, String address, String phone, Account account) {
+	public Client(Integer id, String name, String email, String cpf, String address, String phone) {
 		super();
 		
 		this.id = id;
@@ -54,7 +56,8 @@ public class Client implements Serializable {
 		this.email = email;
 		this.address = address;
 		this.phone = phone;
-		this.account = account;
+		this.cpf = cpf;
+//		this.account = account;
 	}
 
 
@@ -107,11 +110,19 @@ public class Client implements Serializable {
 		this.account = account;
 	}
 
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((cpf == null) ? 0 : cpf.hashCode());
 		return result;
 	}
 
@@ -124,11 +135,13 @@ public class Client implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Client other = (Client) obj;
-		if (id == null) {
-			if (other.id != null)
+		if (cpf == null) {
+			if (other.cpf != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!cpf.equals(other.cpf))
 			return false;
 		return true;
 	}
+
+	
 }

@@ -14,8 +14,8 @@ public class Deposit extends Transaction {
 		
 	}
 
-	public Deposit(Integer id, Account accountActive, Double value) {
-		super(id, accountActive);
+	public Deposit(Integer id, Account accountActive, Account accountPassive, Double value) {
+		super(id, accountActive, accountPassive, "Deposit");
 		
 		this.value = value;
 	}
@@ -23,6 +23,12 @@ public class Deposit extends Transaction {
 	@Override
 	public StatusTransaction transaction() {
 		// Execute Transaction
+		if(super.getAccountActive().equals(super.getAccountPassive())) {
+			this.getAccountActive().addBalance(value);
+		} else {
+			this.getAccountActive().subBalance(value);
+			this.getAccountPassive().addBalance(value);
+		}
 		
 		super.setStatus(StatusTransaction.SUCCESS);
 		

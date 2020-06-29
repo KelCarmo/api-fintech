@@ -32,24 +32,24 @@ public class CapgeminiFintechApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		Account ca1 = new Account(null, "068-1", "50.580-9", 1024.0);
-		Client c1 = new Client(null, "Chico Buarque", "bossanova@brasil.com", "Rua Rio de Janeiro, 1960", "(75)999999999", ca1);
+		Client c1 = new Client(null, "Chico Buarque", "bossanova@brasil.com", "00553456847", "Rua Rio de Janeiro, 1960", "(75)999999999");
+		Account ca1 = new Account(null, "068-1", "50.580-9", 1000.0, c1);
 		
-		ca1.setClient(c1);
+		c1.setAccount(ca1);
 		
-		Account ca2 = new Account(null, "068-0", "40.580-5", 1024.0);
-		Client c2 = new Client(null, "Maria Bethania", "mpb@brasil.com", "Rua Bahia , 101", "(75)999999999", ca2);
+		Client c2 = new Client(null, "Maria Bethania", "mpb@brasil.com", "00553456848" ,"Rua Bahia , 101", "(75)999999999");
+		Account ca2 = new Account(null, "068-0", "40.580-5", 1000.0, c2);
 		
-		ca2.setClient(c2);
+		c2.setAccount(ca2);
 		
-		repoClient.saveAll(Arrays.asList(c1, c2));
-		repoAccount.saveAll(Arrays.asList(ca1, ca2));
-		
-		Transaction t1 = new Deposit(null,ca1, 50.00);
-		Transaction t2 = new WithDraw(null, ca1, 25.00);
+		Transaction t1 = new Deposit(null,ca1, ca2, 50.00);
+		Transaction t2 = new WithDraw(null, ca2, ca2, 50.00);
 		t1.transaction();
 		t2.transaction();
 		ca1.getTransactions().addAll(Arrays.asList(t1, t2));
+		
+		repoClient.saveAll(Arrays.asList(c1, c2));
+		repoAccount.saveAll(Arrays.asList(ca1, ca2));
 		
 		repoTransaction.saveAll(Arrays.asList(t1, t2));
 	}

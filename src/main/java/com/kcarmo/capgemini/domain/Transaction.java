@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kcarmo.capgemini.domain.enums.StatusTransaction;
 
 @Entity
@@ -25,16 +26,25 @@ public abstract class Transaction implements Serializable {
 	private Integer id; 
 	
 	private Integer status;
+	private String type;
 	
+	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "account_id")
+	@JoinColumn(name = "accountActive_id", nullable = false)
 	private Account accountActive;
+	
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "accountPassive_id", nullable = false)
+	private Account accountPassive;
 
-	public Transaction(Integer id, Account accountActive) {
+	public Transaction(Integer id, Account accountActive, Account accountPassive, String type) {
 		super();
 		this.id = id;
 		this.status = StatusTransaction.PROCESSING.getCod();
 		this.accountActive = accountActive;
+		this.accountPassive = accountPassive;
+		this.type = type;
 	}
 	
 	public Transaction() {
@@ -58,6 +68,30 @@ public abstract class Transaction implements Serializable {
 
 	public void setStatus(StatusTransaction status) {
 		this.status = status.getCod();
+	}
+
+	public Account getAccountPassive() {
+		return accountPassive;
+	}
+
+	public void setAccountPassive(Account accountPassive) {
+		this.accountPassive = accountPassive;
+	}
+	
+	public Account getAccountActive() {
+		return accountActive;
+	}
+
+	public void setAccountActive(Account accountActive) {
+		this.accountActive = accountActive;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	@Override
