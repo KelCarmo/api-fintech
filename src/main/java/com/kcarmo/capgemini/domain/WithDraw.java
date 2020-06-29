@@ -15,7 +15,7 @@ public class WithDraw extends Transaction {
 	}
 	
 	public WithDraw(Integer id, Account accountActive, Account accountPassive, Double value) {
-		super(id, accountActive, accountPassive, "With Draw");
+		super(id, accountActive, accountPassive, "Withdraw");
 		
 		this.value = value;
 	}
@@ -23,18 +23,15 @@ public class WithDraw extends Transaction {
 	@Override
 	public StatusTransaction transaction() {
 		// Execute Transaction
-		if(super.getAccountActive().equals(super.getAccountPassive())) {
-			this.getAccountActive().subBalance(value);
-		} else {
-			super.setStatus(StatusTransaction.ERROR);
-			
-			return StatusTransaction.ERROR;
-		}
 		
-		super.setStatus(StatusTransaction.SUCCESS);
+			if(this.getAccountActive().getBalance() >= this.value) {
+				this.getAccountActive().subBalance(value);
+				super.setStatus(StatusTransaction.SUCCESS);
+			} else {
+				super.setStatus(StatusTransaction.INSUFFICIENT_FUNDS);
+			}
 		
-		return StatusTransaction.SUCCESS;
-		
+		return this.getStatus();
 	}
 
 	public Double getValue() {

@@ -26,13 +26,16 @@ public class Deposit extends Transaction {
 		if(super.getAccountActive().equals(super.getAccountPassive())) {
 			this.getAccountActive().addBalance(value);
 		} else {
-			this.getAccountActive().subBalance(value);
-			this.getAccountPassive().addBalance(value);
+			if(this.getAccountActive().getBalance() >= this.value) {
+				this.getAccountActive().subBalance(value);
+				this.getAccountPassive().addBalance(value);
+				super.setStatus(StatusTransaction.SUCCESS);
+			} else {
+				super.setStatus(StatusTransaction.INSUFFICIENT_FUNDS);
+			}
 		}
 		
-		super.setStatus(StatusTransaction.SUCCESS);
-		
-		return StatusTransaction.SUCCESS;
+		return this.getStatus();
 	}
 
 	public Double getValue() {
