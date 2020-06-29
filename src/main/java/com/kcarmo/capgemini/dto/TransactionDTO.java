@@ -7,15 +7,17 @@ public class TransactionDTO implements Serializable{
 	
 	private double value;
 	private Integer accountActive_id;
-	private Integer accountPassive_id;
+	private String  agency;
+	private String 	ca;
 	
 	public TransactionDTO() {
 		
 	}
 	
-	public TransactionDTO(Integer accountActive_id, Integer accountPassive_id, double value) {
+	public TransactionDTO(Integer accountActive_id, String agency, String ca, double value) {
 		this.accountActive_id = accountActive_id;
-		this.accountPassive_id = accountPassive_id;
+		this.agency = agency;
+		this.ca = ca;
 		this.value = value;
 	}
 
@@ -35,11 +37,20 @@ public class TransactionDTO implements Serializable{
 		this.accountActive_id = accountActive_id;
 	}
 
-	public Integer getAccountPassive_id() {
-		return accountPassive_id;
+	public String getAgency() {
+		return agency;
 	}
 
-	public void setAccountPassive_id(Integer accountPassive_id) {
-		this.accountPassive_id = accountPassive_id;
+	public void setAgency(String agency) {
+		this.agency = agency;
 	}
+
+	public String getCa() {
+		return ca;
+	}
+
+	public void setCa(String ca) {
+		this.ca = ca;
+	}
+	
 }

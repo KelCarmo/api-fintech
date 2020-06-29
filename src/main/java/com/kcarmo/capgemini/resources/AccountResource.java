@@ -20,6 +20,7 @@ public class AccountResource {
 	
 	@Autowired
 	private AccountService accountService;
+	private TransactionDTO requestBody;
 	
 	@RequestMapping(value="account/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> findOne(@PathVariable Integer id) {
@@ -30,12 +31,13 @@ public class AccountResource {
 	
 	@RequestMapping(value="account/deposit", method = RequestMethod.POST)
 	public ResponseEntity<?> deposit(@RequestBody TransactionDTO requestBody) {
-		Transaction obj = accountService.deposit(requestBody.getAccountActive_id(), requestBody.getAccountPassive_id(), requestBody.getValue());
+		Transaction obj = accountService.deposit(requestBody.getAccountActive_id(), requestBody.getAgency(), requestBody.getCa(), requestBody.getValue());
 		
 		if(obj != null) {
 			if(obj.getStatus() == StatusTransaction.SUCCESS) {
 				return ResponseEntity.ok().body(obj);
 			} else {
+				if(obj.getStatus() == StatusTransaction.ACCOUNT_NOT_FIND)
 				return ResponseEntity.status(400).body(obj);
 			}
 		}
@@ -47,7 +49,7 @@ public class AccountResource {
 	@RequestMapping(value="account/withdraw", method = RequestMethod.POST)
 	public ResponseEntity<?> withdraw(@RequestBody TransactionDTO requestBody) {
 		Transaction obj = accountService.withDraw(requestBody.getAccountActive_id(), requestBody.getValue());
-		
+	
 		if(obj != null) {
 			if(obj.getStatus() == StatusTransaction.SUCCESS) {
 				return ResponseEntity.ok().body(obj);

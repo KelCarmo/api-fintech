@@ -6,7 +6,8 @@ public enum StatusTransaction {
 	DENIED(2, "Denied"),
 	ERROR(3, "Error"),
 	PROCESSING(4, "Processing"),
-	INSUFFICIENT_FUNDS(5, "insufficient funds");
+	INSUFFICIENT_FUNDS(5, "insufficient funds"),
+	ACCOUNT_NOT_FIND(6, "Account not find");
 	
 	private int cod;
 	private String description;

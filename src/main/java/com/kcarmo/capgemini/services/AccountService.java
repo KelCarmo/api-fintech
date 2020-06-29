@@ -33,9 +33,9 @@ public class AccountService {
 		return obj.orElse(null);
 	}
 	
-	public Transaction deposit(Integer id_active, Integer id_passive, double value) {
+	public Transaction deposit(Integer id_active, String agency_passive, String ca_passive, double value) {
 		Optional<Account> active = repoAccount.findById(id_active);
-		Optional<Account> passive = repoAccount.findById(id_passive);
+		Optional<Account> passive = repoAccount.findByAgencyAndCa(agency_passive, ca_passive);
 		
 		Transaction t1 = null;
 		
@@ -52,14 +52,19 @@ public class AccountService {
 				repoAccount.saveAll(Arrays.asList(ca1, ca2));
 				
 				repoTransaction.save(t1);
+				
+				return t1;
 			}
 		}
+		
+		t1 = new Deposit(null, active.orElse(null), passive.orElse(null), value);
+		t1.setStatus(StatusTransaction.ACCOUNT_NOT_FIND);
 		
 		return t1;
 	}
 	
-	public Transaction withDraw(Integer id_active, double value) {
-		Optional<Account> active = repoAccount.findById(id_active);
+	public Transaction withDraw(Integer id, double value) {
+		Optional<Account> active = repoAccount.findById(id);
 		
 		Transaction t1 = null;
 		
