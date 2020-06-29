@@ -12,12 +12,16 @@ import com.kcarmo.capgemini.domain.Deposit;
 import com.kcarmo.capgemini.domain.Transaction;
 import com.kcarmo.capgemini.domain.WithDraw;
 import com.kcarmo.capgemini.repositories.AccountRepository;
+import com.kcarmo.capgemini.repositories.TransactionRepository;
 
 @Service
 public class AccountService {
 	
 	@Autowired
 	private AccountRepository repoAccount;
+	
+	@Autowired
+	private TransactionRepository repoTransaction;
 
 	public Account findOne(Integer id) {
 		Optional<Account> obj = repoAccount.findById(id);
@@ -40,8 +44,12 @@ public class AccountService {
 			Account ca2 = passive.orElse(null);
 			
 			t1 = new Deposit(null, ca1, ca2, value);
+			
+			t1.transaction();
 			ca1.getTransactions().add(t1);
 			repoAccount.saveAll(Arrays.asList(ca1, ca2));
+			
+			repoTransaction.save(t1);
 		}
 		
 		return t1;
@@ -56,8 +64,11 @@ public class AccountService {
 			Account ca1 = active.orElse(null);
 			
 			t1 = new WithDraw(null, ca1, ca1, value);
+			
+			t1.transaction();
 			ca1.getTransactions().add(t1);
 			repoAccount.saveAll(Arrays.asList(ca1));
+			repoTransaction.save(t1);
 		}
 		
 		return t1;
